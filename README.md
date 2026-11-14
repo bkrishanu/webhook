@@ -2,9 +2,35 @@
 
 HookNest gives every visitor a **permanent webhook URL** and shows each HTTP request sent to it, live, in a clean green dashboard. It's a self-hosted alternative to webhook.site, built with **Next.js (React + Node.js API routes)**, **Tailwind CSS** and **Upstash Redis**, and it runs on **Vercel**.
 
+## Live app
+
+**https://webhook-olive-chi.vercel.app**
+
+| What | URL |
+|---|---|
+| Homepage (share this) | `https://webhook-olive-chi.vercel.app` |
+| Your webhook URL (paste into the system that sends webhooks) | `https://webhook-olive-chi.vercel.app/h/<id>` |
+| Your dashboard (bookmark this) | `https://webhook-olive-chi.vercel.app/inbox/<id>` |
+
+### How to use it
+
+1. Open the homepage. You're given your own webhook URL and taken to your dashboard.
+2. Copy the **webhook URL** from the green bar and paste it into the service that sends webhooks (Stripe, GitHub, your own app and so on).
+3. Bookmark the **dashboard link** so you can return to your requests from any device.
+
+Each person who opens the homepage gets a different `<id>`, so everyone sees only their own requests.
+
+Quick test (replace `<id>` with your own):
+
+```bash
+curl -X POST https://webhook-olive-chi.vercel.app/h/<id> \
+  -H 'Content-Type: application/json' \
+  -d '{"event":"order.created","id":1234}'
+```
+
 ## Features
 
-- **Permanent URL per user:** `https://<your-app>/h/<id>`. Every user gets their own ID, so user 1 and user 2 only see their own requests. The URL never changes.
+- **Permanent URL per user:** `https://webhook-olive-chi.vercel.app/h/<id>`. Every user gets their own ID, so user 1 and user 2 only see their own requests. The URL never changes.
 - Accepts **any method** (GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS) and **any sub-path** (`/h/<id>/orders/42`).
 - Shows the method, path, query parameters, headers, body, IP, user agent, size and time of every request.
 - Pretty-printed, collapsible **JSON viewer**, a form-field table and base64 display for binary bodies.
@@ -23,7 +49,7 @@ Retention: requests are kept for **7 days**, with up to **500 per URL**. Request
 2. Open the project → **Storage** tab → **Create Database** → choose **Upstash for Redis** from the Marketplace (the free plan is fine) → **Connect** it to this project for all environments.
    This adds the `KV_REST_API_URL` and `KV_REST_API_TOKEN` environment variables automatically.
 3. Go to **Deployments** → open the menu (⋯) on the latest deployment → **Redeploy**, so the new variables are picked up.
-4. Open your app URL. You'll be taken to your own inbox with a permanent webhook URL.
+4. Open your app URL (currently https://webhook-olive-chi.vercel.app). You'll be taken to your own inbox with a permanent webhook URL.
 
 If you'd rather create the Upstash database at [console.upstash.com](https://console.upstash.com), add `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` as environment variables in Vercel instead.
 
